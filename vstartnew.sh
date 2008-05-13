@@ -1,8 +1,14 @@
 #!/bin/sh
 
+./stop.sh
+rm core*
+
+test -d out || mkdir out
+rm out/*
+
 # figure machine's ip
 HOSTNAME=`hostname`
-IP=`host $HOSTNAME | cut -d ' ' -f 4`
+IP=`host $HOSTNAME | grep $HOSTNAME | cut -d ' ' -f 4`
 [ "$CEPH_BIN" == "" ] && CEPH_BIN=.
 
 echo hostname $HOSTNAME
@@ -21,24 +27,23 @@ $CEPH_BIN/monmaptool --create --clobber --add $IP:12345 --print .ceph_monmap
 $CEPH_BIN/mkmonfs --clobber mondata/mon0 --mon 0 --monmap .ceph_monmap
 
 # shared args
-ARGS="-d --debug_ms 1"
+ARGS="-d"
 
 # start monitor
-$CEPH_BIN/cmon $ARGS mondata/mon0 --debug_mon 20 --debug_ms 1
+$CEPH_BIN/cmon $ARGS mondata/mon0 --debug_mon 10 --debug_ms 1
 
 # build and inject an initial osd map
 $CEPH_BIN/osdmaptool --clobber --createsimple .ceph_monmap 4 --print .ceph_osdmap
 $CEPH_BIN/cmonctl osd setmap -i .ceph_osdmap
 
-# initialize osd stores
-for osd in 0 1 2 3
+for osd in 0 #1 2 3 
 do
  $CEPH_BIN/cosd --mkfs_for_osd $osd dev/osd$osd  # initialize empty object store
+ $CEPH_BIN/cosd $ARGS dev/osd$osd --debug_ms 1 --debug_osd 10 --debug_fakestore 10 #--debug_osd 40
 done
 
-# stop monitor
-killall cmon
-#$CEPH_BIN/cmonctl stop
+# mds
+$CEPH_BIN/cmds $ARGS --debug_ms 1 --debug_mds 20 --mds_thrash_fragments 0 #--debug_ms 20
 
-echo "mkfs done."
+echo "started.  stop.sh to stop.  see out/* (e.g. 'tail -f out/????') for debug output."
 
