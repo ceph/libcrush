@@ -25,3 +25,6 @@ set(crush_srcs
 
 add_library(crush STATIC ${crush_srcs})
 
+add_subdirectory(test)
+add_subdirectory(googletest)
+enable_testing()
