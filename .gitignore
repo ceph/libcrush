@@ -1,3 +1,4 @@
-# local directory specific entries
-/.git_version
-/ceph_ver.h
+build
+CMakeCache.txt
+Makefile
+*~

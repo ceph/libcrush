@@ -6,7 +6,7 @@
 #include <assert.h>
 #include <errno.h>
 
-#include "include/int_types.h"
+#include "int_types.h"
 
 #include "builder.h"
 #include "hash.h"

@@ -1,7 +1,7 @@
 #ifndef CEPH_CRUSH_COMPAT_H
 #define CEPH_CRUSH_COMPAT_H
 
-#include "include/int_types.h"
+#include "int_types.h"
 
 #include <assert.h>
 #include <stdio.h>
