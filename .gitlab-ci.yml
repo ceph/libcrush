@@ -1,2 +1,11 @@
-integration:
+stages:
+  - test
+  - doc
+
+test:
+  stage: test
   script: "bash -x run-tests.sh"
+
+doc:
+  stage: doc
+  script: "bash -x build-doc.sh"
