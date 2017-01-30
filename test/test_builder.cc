@@ -17,9 +17,15 @@ TEST(builder, crush_make_bucket) {
   const int hash = 3;
   int weights[1] = { 1 };
   int items[1] = { 1 };
-  crush_bucket *b = crush_make_bucket(m, CRUSH_BUCKET_UNIFORM, hash, type,
-                                      size, items, weights);
-  EXPECT_EQ(CRUSH_BUCKET_UNIFORM, b->alg);
+  crush_bucket *b;
+
+  for(auto alg : { CRUSH_BUCKET_UNIFORM, CRUSH_BUCKET_LIST, CRUSH_BUCKET_STRAW2 }) {
+    b = crush_make_bucket(m, alg, hash, type, size, items, weights);
+    ASSERT_TRUE(b);
+    EXPECT_EQ(alg, b->alg);
+    crush_destroy_bucket(b);
+  }
+
   crush_destroy(m);
 }
 
