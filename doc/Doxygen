@@ -6,7 +6,7 @@
 DOXYFILE_ENCODING      = UTF-8
 PROJECT_NAME           = libcrush
 PROJECT_NUMBER         = 1.0.0
-PROJECT_BRIEF          = "libcrush synopsis"
+PROJECT_BRIEF          = "C library to control placement in a hierarchy"
 PROJECT_LOGO           = 
 OUTPUT_DIRECTORY       = doc/output
 CREATE_SUBDIRS         = NO
