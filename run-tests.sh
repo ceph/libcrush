@@ -20,6 +20,6 @@ ctest -V
 # distributing
 #
 make VERBOSE=1 dist
-distdir=/var/www/html/$CI_BUILD_REF_NAME
+distdir=/var/www/html/dist/$CI_BUILD_REF_NAME
 mkdir -p $distdir
 cp *.tar.gz $distdir
