@@ -28,3 +28,8 @@ add_library(crush STATIC ${crush_srcs})
 add_subdirectory(test)
 add_subdirectory(googletest)
 enable_testing()
+
+set(ARCHIVE_NAME ${CMAKE_PROJECT_NAME}-${VERSION})
+add_custom_target(dist
+  COMMAND git-archive-all/git-archive-all.sh --format tar.gz --prefix ${CMAKE_PROJECT_NAME}-${VERSION}/ ${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}-${VERSION}.tar.gz
+  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})

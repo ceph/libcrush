@@ -2,3 +2,6 @@
 	path = googletest
 	url = https://github.com/google/googletest
 
+[submodule "git-archive-all"]
+	path = git-archive-all
+	url = https://github.com/meitar/git-archive-all.sh.git
