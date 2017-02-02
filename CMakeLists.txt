@@ -26,6 +26,16 @@ set(crush_srcs
   crush/hash.c)
 
 add_library(crush STATIC ${crush_srcs})
+install(TARGETS crush DESTINATION lib)
+install(DIRECTORY crush DESTINATION include FILES_MATCHING PATTERN "*.h")
+install(FILES ${CMAKE_BINARY_DIR}/crush/acconfig.h DESTINATION ${CMAKE_INSTALL_PREFIX}/include/crush/)
+
+configure_file(
+  ${CMAKE_SOURCE_DIR}/libcrush.pc.in
+  ${CMAKE_BINARY_DIR}/libcrush.pc
+  @ONLY
+)
+install(FILES ${CMAKE_BINARY_DIR}/libcrush.pc DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/pkgconfig/)
 
 add_subdirectory(test)
 add_subdirectory(googletest)
