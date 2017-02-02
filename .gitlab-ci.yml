@@ -1,6 +1,7 @@
 stages:
   - test
   - doc
+  - release
 
 test:
   stage: test
@@ -9,3 +10,12 @@ test:
 doc:
   stage: doc
   script: "bash -x build-doc.sh"
+
+release:
+  stage: release
+  script: "bash -x build-release.sh"
+  dependencies:
+    - test
+    - doc
+  only:
+    - tags

@@ -1,7 +1,6 @@
 #!/bin/bash
 
 set -ex
-env
 apt-get update
 apt-get install -y doxygen rsync
 doxygen doc/Doxygen
