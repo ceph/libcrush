@@ -3,6 +3,8 @@ cmake_minimum_required(VERSION 2.8.11)
 project(libcrush)
 set(VERSION 1.0.0)
 
+set(CMAKE_C_FLAGS_NONE "${CMAKE_C_FLAGS_NONE} -Wall -O2 -g")
+
 include_directories(${CMAKE_SOURCE_DIR}/crush)
 include_directories(${CMAKE_BINARY_DIR}/crush)
 
