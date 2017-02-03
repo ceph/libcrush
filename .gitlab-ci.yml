@@ -1,21 +1,25 @@
 stages:
-  - test
-  - doc
-  - release
+  - build
+  - install
+  - cleanup
 
-test:
-  stage: test
-  script: "bash -x run-tests.sh"
+build:
+  stage: build
+  script: ./build.sh
 
-doc:
-  stage: doc
-  script: "bash -x build-doc.sh"
+install:
+  stage: install
+  script: ./install.sh
+  except:
+    - tags
 
 release:
-  stage: release
-  script: "bash -x build-release.sh"
-  dependencies:
-    - test
-    - doc
+  stage: install
+  script: ./release.sh
   only:
     - tags
+
+cleanup:
+  stage: cleanup
+  script: ./cleanup.sh
+  when: always
