@@ -282,7 +282,7 @@ RTF_SOURCE_CODE        = NO
 #---------------------------------------------------------------------------
 # Configuration options related to the man page output
 #---------------------------------------------------------------------------
-GENERATE_MAN           = NO
+GENERATE_MAN           = YES
 MAN_OUTPUT             = man
 MAN_EXTENSION          = .3
 MAN_SUBDIR             = 
