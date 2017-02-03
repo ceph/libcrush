@@ -19,6 +19,10 @@ configure_file(
   ${CMAKE_BINARY_DIR}/crush/acconfig.h
 )
 
+add_custom_target(doc
+  COMMAND : \; \( cat doc/Doxygen \; echo 'OUTPUT_DIRECTORY = ${CMAKE_BINARY_DIR}/doc' \) | doxygen -
+  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+
 set(crush_srcs
   crush/builder.c
   crush/mapper.c
@@ -29,6 +33,7 @@ add_library(crush STATIC ${crush_srcs})
 install(TARGETS crush DESTINATION lib)
 install(DIRECTORY crush DESTINATION include FILES_MATCHING PATTERN "*.h")
 install(FILES ${CMAKE_BINARY_DIR}/crush/acconfig.h DESTINATION ${CMAKE_INSTALL_PREFIX}/include/crush/)
+install(FILES ${CMAKE_BINARY_DIR}/doc/man/man3/API.3 DESTINATION ${CMAKE_INSTALL_PREFIX}/share/man/man3/libcrush.3)
 
 configure_file(
   ${CMAKE_SOURCE_DIR}/libcrush.pc.in
