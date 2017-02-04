@@ -7,7 +7,7 @@ cd /var/www/builds/$CI_BUILD_REF_NAME
 #
 # source
 #
-distdir=/var/www/html/dist/$CI_BUILD_REF_NAME
+distdir=/var/www/dist/$CI_BUILD_REF_NAME
 mkdir -p $distdir
 cp *.tar.gz $distdir
 #
