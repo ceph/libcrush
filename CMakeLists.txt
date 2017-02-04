@@ -31,17 +31,25 @@ set(crush_srcs
   crush/crush.c
   crush/hash.c)
 
-add_library(crush STATIC ${crush_srcs})
-install(TARGETS crush DESTINATION lib)
-install(DIRECTORY crush DESTINATION include FILES_MATCHING PATTERN "*.h")
-install(FILES ${CMAKE_BINARY_DIR}/crush/acconfig.h DESTINATION ${CMAKE_INSTALL_PREFIX}/include/crush/)
+set(CMAKE_INSTALL_LIBDIR ${CMAKE_INSTALL_PREFIX}/lib CACHE PATH "libdir")
+set(CMAKE_INSTALL_INCLUDEDIR ${CMAKE_INSTALL_PREFIX}/include CACHE PATH "includedir")
+set(CMAKE_INSTALL_DATADIR ${CMAKE_INSTALL_PREFIX}/share CACHE PATH "datadir")
+
+add_library(crush SHARED ${crush_srcs})
+set_target_properties(crush PROPERTIES
+    VERSION 1.0.0
+    SOVERSION 1
+    )
+install(TARGETS crush DESTINATION ${CMAKE_INSTALL_LIBDIR})
+install(DIRECTORY crush DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} FILES_MATCHING PATTERN "*.h")
+install(FILES ${CMAKE_BINARY_DIR}/crush/acconfig.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/crush/)
 
 configure_file(
   ${CMAKE_SOURCE_DIR}/libcrush.pc.in
   ${CMAKE_BINARY_DIR}/libcrush.pc
   @ONLY
 )
-install(FILES ${CMAKE_BINARY_DIR}/libcrush.pc DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/pkgconfig/)
+install(FILES ${CMAKE_BINARY_DIR}/libcrush.pc DESTINATION ${CMAKE_INSTALL_DATADIR}/pkgconfig/)
 
 add_subdirectory(test)
 add_subdirectory(googletest)
