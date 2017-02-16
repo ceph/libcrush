@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 
 extern "C" {
-#include "builder.h"
+#include "crush/builder.h"
 }
 
 TEST(builder, crush_create) {

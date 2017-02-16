@@ -26,6 +26,7 @@ add_custom_target(doc
 install(FILES ${CMAKE_BINARY_DIR}/doc/man/man3/API.3 RENAME libcrush.3 DESTINATION ${CMAKE_INSTALL_PREFIX}/share/man/man3/)
 
 set(crush_srcs
+  crush/helpers.c
   crush/builder.c
   crush/mapper.c
   crush/crush.c
