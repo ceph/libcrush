@@ -12,7 +12,7 @@ else
 fi
 git submodule sync
 git submodule update --force --init --recursive
-mkdir build
+mkdir -p build
 (
    #
    # building
