@@ -5,15 +5,17 @@
 int crush_find_roots(struct crush_map *map, int **buckets)
 {
   int ref[map->max_buckets];
-  memset(ref, '\0', sizeof(ref));
   int root_count = map->max_buckets;
-  for (int pos = 0; pos < map->max_buckets; pos++) {
+  int pos, i;
+
+  memset(ref, '\0', sizeof(ref));
+  for (pos = 0; pos < map->max_buckets; pos++) {
     struct crush_bucket *b = map->buckets[pos];
     if (b == NULL) {
       root_count--;
       continue;
     }
-    for (int i = 0; i < b->size; i++) {
+    for (i = 0; i < b->size; i++) {
       if (b->items[i] >= 0)
         continue;
       int item = -1-b->items[i];
@@ -29,7 +31,7 @@ int crush_find_roots(struct crush_map *map, int **buckets)
   if (roots == NULL)
     return -ENOMEM;
   int roots_length = 0;
-  for (int pos = 0; pos < map->max_buckets; pos++) {
+  for (pos = 0; pos < map->max_buckets; pos++) {
     if (map->buckets[pos] != NULL && ref[pos] == 0)
       roots[roots_length++] = -1-pos;
   }
