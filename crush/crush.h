@@ -285,6 +285,7 @@ struct crush_bucket_straw {
 struct crush_bucket_straw2 {
         struct crush_bucket h; /*!< generic bucket information */
 	__u32 *item_weights;   /*!< 16.16 fixed point weight for each item */
+	__u32 *item_weights2;   /*!< 16.16 fixed point weight for each item */
 };
 
 

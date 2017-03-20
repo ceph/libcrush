@@ -75,6 +75,7 @@ void crush_destroy_bucket_straw(struct crush_bucket_straw *b)
 void crush_destroy_bucket_straw2(struct crush_bucket_straw2 *b)
 {
 	kfree(b->item_weights);
+	kfree(b->item_weights2);
 	kfree(b->h.items);
 	kfree(b);
 }

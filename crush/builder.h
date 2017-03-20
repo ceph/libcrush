@@ -183,7 +183,7 @@ struct crush_bucket *crush_make_bucket(struct crush_map *map, int alg, int hash,
  *
  * @returns 0 on success, < 0 on error
  */
-extern int crush_bucket_add_item(struct crush_map *map, struct crush_bucket *bucket, int item, int weight);
+extern int crush_bucket_add_item(struct crush_map *map, struct crush_bucket *bucket, int item, int weight, int weight2);
 /** @ingroup API
  *
  * If __bucket->alg__ is ::CRUSH_BUCKET_UNIFORM,

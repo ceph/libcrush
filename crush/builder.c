@@ -631,16 +631,22 @@ crush_make_straw2_bucket(struct crush_map *map,
         if (!bucket->item_weights)
                 goto err;
 
+	bucket->item_weights2 = malloc(sizeof(__u32)*size);
+        if (!bucket->item_weights2)
+                goto err;
+
         bucket->h.weight = 0;
 	for (i=0; i<size; i++) {
 		bucket->h.items[i] = items[i];
 		bucket->h.weight += weights[i];
 		bucket->item_weights[i] = weights[i];
+		bucket->item_weights2[i] = weights[i];
 	}
 
 	return bucket;
 err:
         free(bucket->item_weights);
+        free(bucket->item_weights2);
         free(bucket->h.items);
         free(bucket);
         return NULL;
@@ -835,7 +841,7 @@ int crush_add_straw_bucket_item(struct crush_map *map,
 
 int crush_add_straw2_bucket_item(struct crush_map *map,
 				 struct crush_bucket_straw2 *bucket,
-				 int item, int weight)
+				 int item, int weight, int weight2)
 {
 	int newsize = bucket->h.size + 1;
 
@@ -851,9 +857,15 @@ int crush_add_straw2_bucket_item(struct crush_map *map,
 	} else {
 		bucket->item_weights = _realloc;
 	}
+	if ((_realloc = realloc(bucket->item_weights2, sizeof(__u32)*newsize)) == NULL) {
+		return -ENOMEM;
+	} else {
+		bucket->item_weights2 = _realloc;
+	}
 
 	bucket->h.items[newsize-1] = item;
 	bucket->item_weights[newsize-1] = weight;
+	bucket->item_weights2[newsize-1] = weight2;
 
 	if (crush_addition_is_unsafe(bucket->h.weight, weight))
                 return -ERANGE;
@@ -865,7 +877,7 @@ int crush_add_straw2_bucket_item(struct crush_map *map,
 }
 
 int crush_bucket_add_item(struct crush_map *map,
-			  struct crush_bucket *b, int item, int weight)
+			  struct crush_bucket *b, int item, int weight, int weight2)
 {
 	switch (b->alg) {
 	case CRUSH_BUCKET_UNIFORM:
@@ -877,7 +889,7 @@ int crush_bucket_add_item(struct crush_map *map,
 	case CRUSH_BUCKET_STRAW:
 		return crush_add_straw_bucket_item(map, (struct crush_bucket_straw *)b, item, weight);
 	case CRUSH_BUCKET_STRAW2:
-		return crush_add_straw2_bucket_item(map, (struct crush_bucket_straw2 *)b, item, weight);
+                return crush_add_straw2_bucket_item(map, (struct crush_bucket_straw2 *)b, item, weight, weight2);
 	default:
 		return -1;
 	}
