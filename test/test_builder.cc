@@ -53,3 +53,19 @@ TEST(builder, crush_add_bucket) {
 TEST(builder, crush_multiplication_is_unsafe) {
   ASSERT_TRUE(crush_multiplication_is_unsafe(1, 0));
 }
+
+TEST(builder, crush_bucket__add_item_uniform) {
+  crush_map *m = crush_create();
+  const int type = 1;
+  const int size = 1;
+  const int hash = 3;
+  crush_bucket *b = crush_make_bucket(m, CRUSH_BUCKET_UNIFORM, hash, type,
+                                      0, NULL, NULL);
+  int bucketno = 0;
+  ASSERT_EQ(0, crush_add_bucket(m, 0, b, &bucketno));
+  /* For a kind CRUSH_BUCKET_UNIFORM, if no item weights has been
+     passed to 'crush_make_bucket', by default 0 is used. */
+  ASSERT_EQ(0, crush_bucket_add_item(m, b, 0, 0));
+  ASSERT_EQ(-EINVAL, crush_bucket_add_item(m, b, 0, 1));
+  crush_destroy(m);
+}
