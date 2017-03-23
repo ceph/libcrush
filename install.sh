@@ -13,4 +13,6 @@ cp *.tar.gz $distdir
 #
 # doc
 #
-rsync --delete -av doc/html/ /var/www/doc/$CI_BUILD_REF_NAME/
+docdir=/var/www/doc/$CI_BUILD_REF_NAME
+mkdir -p $docdir
+rsync --delete -av doc/html/ $docdir/
