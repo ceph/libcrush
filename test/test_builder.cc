@@ -7,6 +7,36 @@ extern "C" {
 TEST(builder, crush_create) {
   crush_map *m = crush_create();
   EXPECT_EQ(NULL, m->rules);
+
+  // Ensures that the map is well configured
+  EXPECT_EQ(0, m->choose_local_tries);
+  EXPECT_EQ(0, m->choose_local_fallback_tries);
+  EXPECT_EQ(50, m->choose_total_tries);
+  EXPECT_EQ(1, m->chooseleaf_descend_once);
+  EXPECT_EQ(1, m->chooseleaf_vary_r);
+  EXPECT_EQ(0, m->straw_calc_version);
+  EXPECT_EQ((1 << CRUSH_BUCKET_UNIFORM) |
+	    (1 << CRUSH_BUCKET_LIST) |
+	    (1 << CRUSH_BUCKET_STRAW) |
+	    (1 << CRUSH_BUCKET_STRAW2), m->allowed_bucket_algs);
+
+  crush_destroy(m);
+}
+
+TEST(builder, crush_create_legacy) {
+  crush_map *m = crush_create();
+  EXPECT_EQ(NULL, m->rules);
+
+  set_legacy_crush_map(m);
+  // Ensures that the map is well configured
+  EXPECT_EQ(2, m->choose_local_tries);
+  EXPECT_EQ(5, m->choose_local_fallback_tries);
+  EXPECT_EQ(19, m->choose_total_tries);
+  EXPECT_EQ(0, m->chooseleaf_descend_once);
+  EXPECT_EQ(0, m->chooseleaf_vary_r);
+  EXPECT_EQ(0, m->straw_calc_version);
+  EXPECT_EQ(CRUSH_LEGACY_ALLOWED_BUCKET_ALGS, m->allowed_bucket_algs);
+
   crush_destroy(m);
 }
 
