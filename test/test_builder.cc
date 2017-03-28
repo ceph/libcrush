@@ -54,7 +54,7 @@ TEST(builder, crush_multiplication_is_unsafe) {
   ASSERT_TRUE(crush_multiplication_is_unsafe(1, 0));
 }
 
-TEST(builder, crush_bucket__add_item_uniform) {
+TEST(builder, crush_bucket_add_item_uniform) {
   crush_map *m = crush_create();
   const int type = 1;
   const int size = 1;
