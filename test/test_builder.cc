@@ -99,3 +99,19 @@ TEST(builder, crush_bucket_add_item_uniform) {
   ASSERT_EQ(-EINVAL, crush_bucket_add_item(m, b, 0, 1));
   crush_destroy(m);
 }
+
+TEST(builder, crush_make_rule) {
+  int ruleset = 0;
+  int steps_count = 1;
+  int rule_type = 0;
+  int minsize = 1;
+  int maxsize = 2;
+  struct crush_rule *rule;
+  rule = crush_make_rule(steps_count, ruleset, rule_type, minsize, maxsize);
+  EXPECT_EQ(steps_count, rule->len);
+  crush_destroy_rule(rule);
+}
+
+// Local Variables:
+// compile-command: "cd ../build ; make unittest_builder && valgrind --tool=memcheck test/unittest_builder"
+// End:
