@@ -14,6 +14,7 @@ TEST(builder, crush_create) {
   EXPECT_EQ(50, m->choose_total_tries);
   EXPECT_EQ(1, m->chooseleaf_descend_once);
   EXPECT_EQ(1, m->chooseleaf_vary_r);
+  EXPECT_EQ(1, m->chooseleaf_stable);
   EXPECT_EQ(0, m->straw_calc_version);
   EXPECT_EQ((1 << CRUSH_BUCKET_UNIFORM) |
 	    (1 << CRUSH_BUCKET_LIST) |
@@ -34,6 +35,7 @@ TEST(builder, crush_create_legacy) {
   EXPECT_EQ(19, m->choose_total_tries);
   EXPECT_EQ(0, m->chooseleaf_descend_once);
   EXPECT_EQ(0, m->chooseleaf_vary_r);
+  EXPECT_EQ(0, m->chooseleaf_stable);
   EXPECT_EQ(0, m->straw_calc_version);
   EXPECT_EQ(CRUSH_LEGACY_ALLOWED_BUCKET_ALGS, m->allowed_bucket_algs);
 
