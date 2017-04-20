@@ -99,3 +99,82 @@ TEST(builder, crush_bucket_add_item_uniform) {
   ASSERT_EQ(-EINVAL, crush_bucket_add_item(m, b, 0, 1));
   crush_destroy(m);
 }
+
+TEST(builder, crush_make_choose_args) {
+  crush_map *m = crush_create();
+  const int type = 1;
+  const int hash = 3;
+  crush_bucket *root = crush_make_bucket(m, CRUSH_BUCKET_STRAW2, hash, type,
+                                         0, NULL, NULL);
+  int rootno = 0;
+  ASSERT_EQ(0, crush_add_bucket(m, 0, root, &rootno));
+  ASSERT_EQ(-1, rootno);
+
+  const int b1_size = 2;
+  int b1no = 0;
+  crush_bucket *b1;
+  int b1_weight_0 = 10;
+  int b1_weight_1 = 20;
+  int b1_item_0 = 1;
+  int b1_item_1 = 2;
+  {
+    int weights[2] = { b1_weight_0, b1_weight_1 };
+    int items[2] = { b1_item_0, b1_item_1 };
+
+    b1 = crush_make_bucket(m, CRUSH_BUCKET_STRAW2, hash, type, b1_size, items, weights);
+    ASSERT_EQ(0, crush_add_bucket(m, 0, b1, &b1no));
+    ASSERT_EQ(0, crush_bucket_add_item(m, root, b1no, b1->weight));
+  }
+
+  const int b2_size = 1;
+  int b2no = 0;
+  crush_bucket *b2;
+  int b2_weight_0 = 30;
+  int b2_item_0 = 3;
+  {
+    int weights[1] = { b2_weight_0 };
+    int items[1] = { b2_item_0 };
+
+    b2 = crush_make_bucket(m, CRUSH_BUCKET_STRAW2, hash, type, b2_size, items, weights);
+    ASSERT_EQ(0, crush_add_bucket(m, 0, b2, &b2no));
+    ASSERT_EQ(0, crush_bucket_add_item(m, root, b2no, b2->weight));
+  }
+
+  ASSERT_EQ(2, root->size);
+
+  int num_positions = 2;
+  crush_choose_arg *choose_args = crush_make_choose_args(m, 2);
+  for (int position = 0; position < num_positions; ++position) {
+    ASSERT_EQ(b1_weight_0, choose_args[-1-b1no].weight_set[position].weights[0]);
+    ASSERT_EQ(b1_weight_1, choose_args[-1-b1no].weight_set[position].weights[1]);
+    ASSERT_EQ(2, choose_args[-1-b1no].weight_set[position].size);
+    ASSERT_EQ(2, choose_args[-1-b1no].weight_set_size);
+    ASSERT_EQ(b2_weight_0, choose_args[-1-b2no].weight_set[position].weights[0]);
+    ASSERT_EQ(1, choose_args[-1-b2no].weight_set[position].size);
+    ASSERT_EQ(2, choose_args[-1-b2no].weight_set_size);
+  }
+  ASSERT_EQ(b1_item_0, choose_args[-1-b1no].ids[0]);
+  ASSERT_EQ(b1_item_1, choose_args[-1-b1no].ids[1]);
+  ASSERT_EQ(2, choose_args[-1-b1no].ids_size);
+  ASSERT_EQ(b2_item_0, choose_args[-1-b2no].ids[0]);
+  ASSERT_EQ(1, choose_args[-1-b2no].ids_size);
+
+  crush_destroy_choose_args(choose_args);
+  crush_destroy(m);
+}
+
+TEST(builder, crush_make_rule) {
+  int ruleset = 0;
+  int steps_count = 1;
+  int rule_type = 0;
+  int minsize = 1;
+  int maxsize = 2;
+  struct crush_rule *rule;
+  rule = crush_make_rule(steps_count, ruleset, rule_type, minsize, maxsize);
+  EXPECT_EQ(steps_count, rule->len);
+  crush_destroy_rule(rule);
+}
+
+// Local Variables:
+// compile-command: "cd ../build ; make unittest_builder && valgrind --tool=memcheck test/unittest_builder"
+// End:
